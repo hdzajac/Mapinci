@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="button_login_fragment_login" type="id"/>
+    <item name="button_login_fragment_signup" type="id"/>
+    <item name="button_signup_fragment_login" type="id"/>
+    <item name="button_signup_fragment_signup" type="id"/>
+</resources>

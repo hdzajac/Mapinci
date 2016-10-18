@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Mapinci</string>
+    <string name="button_login">Log in</string>
+    <string name="button_signup">Sign up</string>
+    <string name="input_login">login</string>
+    <string name="input_password">password</string>
+    <string name="message_to_signup">Don\'t you have an account yet?</string>
+    <string name="message_to_login">Do you have an account?</string>
 </resources>
