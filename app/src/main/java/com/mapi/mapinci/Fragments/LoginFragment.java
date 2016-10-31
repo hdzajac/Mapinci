@@ -17,14 +17,13 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.mapi.mapinci.MainActivity;
 import com.mapi.mapinci.R;
+import com.mapi.mapinci.RootActivity;
 import com.mapi.mapinci.Utils.InputValidator;
 
 import java.util.LinkedList;
 import java.util.List;
 
-import static android.provider.AlarmClock.EXTRA_MESSAGE;
 import static android.text.InputType.TYPE_CLASS_TEXT;
 import static android.text.InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS;
 
@@ -93,7 +92,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
 
             case R.id.button_login_fragment_login:
                 Log.i("Login Fragment", "%%%%%%%%%%%%%%%%%%\nLoged IN\n%%%%%%%%%%%%%%");
-                Intent intent = new Intent(getActivity(), MainActivity.class);
+                Intent intent = new Intent(getActivity(), RootActivity.class);
                 //TODO: Login stuff
                 startActivity(intent);
                 break;

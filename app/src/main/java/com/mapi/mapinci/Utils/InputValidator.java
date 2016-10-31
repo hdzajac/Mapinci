@@ -7,7 +7,7 @@ import android.widget.EditText;
 import java.util.List;
 
 public class InputValidator {
-
+    //todo: fix it, enables  with one input filled
     public static void enableButtonsWhenNotEmpty(List<EditText> inputs, List<Button> buttons) {
         for (Button buttonToEnable: buttons) {
             if (buttonToEnable != null) {
