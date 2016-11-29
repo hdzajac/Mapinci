@@ -11,6 +11,7 @@ public class Segment implements SegmentSoul{
     private Node n1;
     private Node n2;
     private Double length;
+    private Double percentLength;
     private Double slope;
     private HashMap<Long, Vector> vectors;
 
@@ -85,6 +86,13 @@ public class Segment implements SegmentSoul{
         }
     }
 
+    public double getPercentLength() {
+        return percentLength;
+    }
+
+    public void setPercentLength(double percentLength) {
+        this.percentLength = percentLength;
+    }
     public Double getSlope() {
         return slope;
     }
