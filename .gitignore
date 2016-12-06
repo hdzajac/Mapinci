@@ -10,3 +10,4 @@
 app/libs/
 app/src/debug/res/values/google_maps_api.xml
 projectFilesBackup/
+.idea/
