@@ -23,6 +23,10 @@ import android.widget.RelativeLayout;
 
 import com.mapi.mapinci.R;
 import com.mapi.mapinci.RootActivity;
+import com.mapi.mapinci.Utils.graph.Node;
+import com.mapi.mapinci.Utils.graph.NodeFactory;
+import com.mapi.mapinci.Utils.graph.segments.Segment;
+import com.mapi.mapinci.Utils.graph.segments.SegmentFactory;
 
 import java.util.ArrayList;
 
@@ -65,11 +69,18 @@ public class DrawingFragment extends Fragment {
 
     private class DrawView extends View {
 
-        ArrayList<Point> points = new ArrayList<>();
+        private ArrayList<Node> nodes = new ArrayList<>();
+        private NodeFactory nf = new NodeFactory();
+        private SegmentFactory sf = new SegmentFactory();
 
-        int counter = 0;
-        float eventX;
-        float eventY;
+        private int counter = 0;
+        private float firstX;
+        private float firstY;
+        private float eventX;
+        private float eventY;
+        private final float epsilon = 30;
+        private boolean continueDraw = true;
+
         private final Paint mPaint;
         private Path path = new Path();
 
@@ -92,35 +103,75 @@ public class DrawingFragment extends Fragment {
         public boolean onTouchEvent(MotionEvent event) {
             // Makes our view repaint and call onDraw
 
-            eventX = event.getX();
-            eventY = event.getY();
+            //check if you can draw
+            if(continueDraw) {
+                eventX = event.getX();
+                eventY = event.getY();
 
-            switch (event.getAction()) {
-                case MotionEvent.ACTION_DOWN:
-                    // Set a new starting point
-                    if(counter==0) {
-                        path.moveTo(eventX, eventY);
-                    }
-                    else {
-                        path.lineTo(eventX, eventY);
-                    }
-                    counter++;
-                    invalidate();
-                    return true;
-//                case MotionEvent.ACTION_MOVE:
-//                    // Connect the points
-//                    path.lineTo(eventX, eventY);
-//                    break;
-//                case MotionEvent.ACTION_UP:
-//                    path.lineTo(eventX, eventY);
-//                    break;
-                default:
-                    return false;
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        // Set a new starting point
+                        if (counter == 0) {
+                            firstX = eventX;
+                            firstY = eventY;
+                            path.moveTo(eventX, eventY);
+                            nodes.add(nf.newNode(Double.valueOf(eventX), Double.valueOf(eventY)));
+                            counter++;
+                        } else {
+                            //check if new point is near the first one
+                            if(isOutsideEpsilon(eventX, eventY)) {
+                                path.lineTo(eventX, eventY);
+                                nodes.add(nf.newNode(Double.valueOf(eventX), Double.valueOf(eventY)));
+                                counter++;
+                            } else {
+                                path.lineTo(firstX, firstY);
+                            }
+                        }
+                        invalidate();
+//                        for (int i = 0; i < nodes.size(); i++) {
+//                            Log.i("Node" + i, nodes.get(i).getLatitude().toString() + " " + nodes.get(i).getLongitude().toString());
+//                        }
+                        return true;
+                    default:
+                        return false;
+                }
+
             }
+            return false;
+        }
 
-//             Makes our view repaint and call onDraw
-//            invalidate();
-//            return true;
+        private boolean isOutsideEpsilon(double x, double y) {
+            //new point is in diameter of first point
+            Log.i("First node", firstX + " " + firstY);
+            Log.i("New node", x + " " + y);
+            Log.i("X", String.valueOf(firstX - x));
+            Log.i("Y", String.valueOf(firstY - y));
+            continueDraw = !((Math.abs(firstX - x) < epsilon) && (Math.abs(firstY - y) < epsilon));
+            Log.i("continueDraw: ", String.valueOf(continueDraw));
+            return continueDraw;
+        }
+
+        private void createSegments() {
+            ArrayList<Segment> segments = new ArrayList<>();
+            for(int i = 0; i < nodes.size() - 1; i++ ) {
+                segments.add(sf.newFullSegment(nodes.get(i), nodes.get(i+1)));
+            }
+            addPercentageLength(segments);
+        }
+
+        private void addPercentageLength(ArrayList<Segment> segments) {
+            double perimeter = countPerimeter(segments);
+            for (Segment segment : segments) {
+                segment.setPercentLength(segment.getLength()/perimeter);
+            }
+        }
+
+        private double countPerimeter(ArrayList<Segment> segments ) {
+            double sum = 0;
+            for (Segment segment : segments) {
+                sum += segment.getLength();
+            }
+            return sum;
         }
 
 
