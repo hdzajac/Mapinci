@@ -19,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
@@ -77,13 +78,13 @@ public class DrawingFragment extends Fragment {
         Log.i("length", length.toString());
 
 
-//        FloatingActionButton myFab = (FloatingActionButton) view.findViewById(R.id.sendButton);
-//
-//        myFab.setOnClickListener(new View.OnClickListener() {
-//            public void onClick(View v) {
-//                sendToServer();
-//            }
-//        });
+        Button myFab = (Button) view.findViewById(R.id.sendButton);
+
+        myFab.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                sendToServer();
+            }
+        });
     }
 
     public void setData(LatLng sp, Double radius, Double length) {
@@ -94,6 +95,7 @@ public class DrawingFragment extends Fragment {
 
     private void sendToServer() {
         Log.i("send to server", "cos");
+        drawView.undoLastPoint();
     }
 
 
@@ -215,6 +217,42 @@ public class DrawingFragment extends Fragment {
             return sum;
         }
 
+        public void undoLastPoint() {
+            if(counter>1) {
+                deleteLastNode();
+                undoPath();
+                continueDraw = true;
+                invalidate();
+            }
+            else {
+                counter = 0;
+                nodes.clear();
+                firstX = 0;
+                firstY = 0;
+                path.reset();
+                invalidate();
+            }
+            Log.i("counter", counter + "");
+            Log.i("nodes size", nodes.size() + "");
+        }
+
+
+        private void deleteLastNode() {
+            if(continueDraw==true) {
+                nodes.remove(nodes.size()-1);
+                counter--;
+            }
+        }
+
+        private void undoPath() {
+            path.reset();
+            path.moveTo(nodes.get(0).getLongitude().floatValue(), nodes.get(0).getLatitude().floatValue());
+            for(int i =1; i < nodes.size(); i++) {
+                path.lineTo(nodes.get(i).getLongitude().floatValue(), nodes.get(i).getLatitude().floatValue());
+            }
+            eventX = nodes.get(nodes.size()-1).getLongitude().floatValue();
+            eventY = nodes.get(nodes.size()-1).getLatitude().floatValue();
+        }
 
     }
 

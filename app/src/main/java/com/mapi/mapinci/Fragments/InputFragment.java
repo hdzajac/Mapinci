@@ -65,9 +65,14 @@ public class InputFragment extends Fragment {
     private void goToShapeCreator() {
         Log.v("mRadius", mRadius.getText().toString());
         Log.v("mLength", mLength.getText().toString());
-        radius = Double.valueOf(mRadius.getText().toString());
-        length = Double.valueOf(mLength.getText().toString());
-        callback.OnInputFinished(radius, length);
+        try{
+            radius = Double.valueOf(mRadius.getText().toString());
+            length = Double.valueOf(mLength.getText().toString());
+            callback.OnInputFinished(radius, length);
+        }
+        catch(NumberFormatException ex){
+            Log.i("input error", " wrong input");
+        }
     }
 }
 
