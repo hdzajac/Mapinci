@@ -11,6 +11,7 @@ import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -65,6 +66,17 @@ public class DrawingFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        FloatingActionButton myFab = (FloatingActionButton) view.findViewById(R.id.sendButton);
+
+        myFab.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                sendToServer();
+            }
+        });
+    }
+
+    private void sendToServer() {
     }
 
     private class DrawView extends View {
