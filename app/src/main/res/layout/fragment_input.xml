@@ -40,11 +40,12 @@
         android:layout_width="63dp"
         android:clickable="true"
         android:layout_gravity="bottom|right"
-        android:layout_margin="16dp"
-        app:fabSize="mini"
+        app:fabSize="normal"
         app:srcCompat="@color/colorAccent"
         android:id="@+id/goToShape"
         app:elevation="5dp"
-        android:layout_weight="1.72"
-        android:layout_height="wrap_content" />
+        android:layout_weight="0.20"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="290dp"
+        android:layout_marginRight="16dp" />
 </LinearLayout>

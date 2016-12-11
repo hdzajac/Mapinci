@@ -43,6 +43,11 @@ public class RootActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        Fragment newFragment = new MapsFragment();
+
+        fragmentManager.beginTransaction().replace(R.id.content_frame, newFragment).commit();
+
     }
 
 

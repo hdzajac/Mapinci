@@ -67,16 +67,17 @@ public class DrawingFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        FloatingActionButton myFab = (FloatingActionButton) view.findViewById(R.id.sendButton);
-
-        myFab.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                sendToServer();
-            }
-        });
+//        FloatingActionButton myFab = (FloatingActionButton) view.findViewById(R.id.sendButton);
+//
+//        myFab.setOnClickListener(new View.OnClickListener() {
+//            public void onClick(View v) {
+//                sendToServer();
+//            }
+//        });
     }
 
     private void sendToServer() {
+        Log.i("send to server", "cos");
     }
 
     private class DrawView extends View {
@@ -90,10 +91,11 @@ public class DrawingFragment extends Fragment {
         private float firstY;
         private float eventX;
         private float eventY;
-        private final float epsilon = 30;
+        private final float epsilon = 40;
         private boolean continueDraw = true;
 
         private final Paint mPaint;
+        private final Paint pointPaint;
         private Path path = new Path();
 
         public DrawView(Context context) {
@@ -102,12 +104,23 @@ public class DrawingFragment extends Fragment {
             mPaint.setStyle(Paint.Style.STROKE);
             mPaint.setColor(Color.BLACK);
             mPaint.setStrokeWidth(6);
+
+            pointPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+            pointPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+            pointPaint.setColor(Color.BLACK);
+            pointPaint.setStrokeWidth(25);
         }
 
         @Override
         protected void onDraw(Canvas canvas) {
             if(counter>1) {
                 canvas.drawPath(path, mPaint);
+                canvas.drawCircle(eventX, eventY, 15, pointPaint);
+            }
+            else {
+                if(firstX!=0 && firstY!=0) {
+                    canvas.drawCircle(firstX, firstY, 15, pointPaint);
+                }
             }
         }
 
@@ -137,12 +150,11 @@ public class DrawingFragment extends Fragment {
                                 counter++;
                             } else {
                                 path.lineTo(firstX, firstY);
+                                eventX = firstX;
+                                eventY = firstY;
                             }
                         }
                         invalidate();
-//                        for (int i = 0; i < nodes.size(); i++) {
-//                            Log.i("Node" + i, nodes.get(i).getLatitude().toString() + " " + nodes.get(i).getLongitude().toString());
-//                        }
                         return true;
                     default:
                         return false;
