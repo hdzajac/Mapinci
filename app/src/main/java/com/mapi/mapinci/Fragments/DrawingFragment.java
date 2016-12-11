@@ -72,6 +72,11 @@ public class DrawingFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        Log.i("starting point", startingPoint.latitude + " " + startingPoint.longitude);
+        Log.i("radius", radius.toString());
+        Log.i("length", length.toString());
+
+
 //        FloatingActionButton myFab = (FloatingActionButton) view.findViewById(R.id.sendButton);
 //
 //        myFab.setOnClickListener(new View.OnClickListener() {

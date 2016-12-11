@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.mapi.mapinci.R;
@@ -17,6 +18,8 @@ import com.mapi.mapinci.R;
 public class InputFragment extends Fragment {
 
 
+    EditText mRadius;
+    EditText mLength;
     OnInputFinished callback;
     Double radius;
     Double length;
@@ -49,6 +52,8 @@ public class InputFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         FloatingActionButton myFab = (FloatingActionButton) view.findViewById(R.id.goToShape);
+        mRadius = (EditText)view.findViewById(R.id.radiusText);
+        mLength = (EditText)view.findViewById(R.id.lengthText);
 
         myFab.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -58,6 +63,10 @@ public class InputFragment extends Fragment {
     }
 
     private void goToShapeCreator() {
+        Log.v("mRadius", mRadius.getText().toString());
+        Log.v("mLength", mLength.getText().toString());
+        radius = Double.valueOf(mRadius.getText().toString());
+        length = Double.valueOf(mLength.getText().toString());
         callback.OnInputFinished(radius, length);
     }
 }
