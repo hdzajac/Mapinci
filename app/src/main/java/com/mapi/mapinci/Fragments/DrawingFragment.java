@@ -29,12 +29,20 @@ import com.mapi.mapinci.Utils.graph.NodeFactory;
 import com.mapi.mapinci.Utils.graph.segments.Segment;
 import com.mapi.mapinci.Utils.graph.segments.SegmentFactory;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
 import static android.R.attr.width;
+import com.loopj.android.http.*;
+import com.mapi.mapinci.Utils.graph.segments.Shape;
+
+import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.entity.StringEntity;
 
 
 public class DrawingFragment extends Fragment {
+
+    private static final String URL = "http://localhost:8080/coordinate";
 
     DrawView drawView;
 
@@ -71,12 +79,35 @@ public class DrawingFragment extends Fragment {
 
         myFab.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                sendToServer();
+                Shape shape = new Shape();
+                sendToServer(shape);
             }
         });
     }
 
-    private void sendToServer() {
+    private void sendToServer(Shape shape) {
+
+        try {
+            StringEntity body = new StringEntity(shape.toJson().toString());
+
+            AsyncHttpClient client = new AsyncHttpClient();
+            client.post(getContext(), URL, body, "application/json", new AsyncHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                    System.out.println("Success! "+statusCode);
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                    System.out.println("failure.. "+statusCode+"  "+error.getMessage());
+                }
+            });
+
+
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
     }
 
     private class DrawView extends View {
