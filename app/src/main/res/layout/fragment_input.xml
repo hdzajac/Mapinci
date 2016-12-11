@@ -6,7 +6,8 @@
     android:id="@+id/fragment_draw"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:baselineAligned="false">
+    android:baselineAligned="false"
+    android:weightSum="1">
 
     <TextView
         android:text="Enter radius for starting point"
@@ -36,8 +37,7 @@
 
 
     <android.support.design.widget.FloatingActionButton
-        android:layout_width="26dp"
-        android:layout_height="wrap_content"
+        android:layout_width="63dp"
         android:clickable="true"
         android:layout_gravity="bottom|right"
         android:layout_margin="16dp"
@@ -45,5 +45,6 @@
         app:srcCompat="@color/colorAccent"
         android:id="@+id/goToShape"
         app:elevation="5dp"
-        />
+        android:layout_weight="1.72"
+        android:layout_height="wrap_content" />
 </LinearLayout>
