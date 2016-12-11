@@ -2,7 +2,9 @@ package com.mapi.mapinci.Utils.graph;
 
 import java.util.Comparator;
 
-public class Node implements Comparable<Node>{
+import io.realm.RealmObject;
+
+public class Node implements Comparable<Node> {
 
     private long id;
     private Double longitude;
@@ -12,7 +14,7 @@ public class Node implements Comparable<Node>{
         this.id = id;
     }
 
-    protected Node() {}
+    public Node() {}
 
     protected Node(Long id, Double longitude, Double latitude){
         this.id = id;

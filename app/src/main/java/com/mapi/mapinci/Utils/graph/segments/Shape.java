@@ -2,17 +2,16 @@ package com.mapi.mapinci.Utils.graph.segments;
 
 
 import java.io.Serializable;
-import java.util.List;
 
 public class Shape implements Serializable {
-    private List<Segment> segments;
+    private Segment[] segments;
     private Double length;
 
-    public List<Segment> getSegments() {
+    public Segment[] getSegments() {
         return segments;
     }
 
-    public void setSegments(List<Segment> segments) {
+    public void setSegments(Segment[] segments) {
         this.segments = segments;
     }
 
