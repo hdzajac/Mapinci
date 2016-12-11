@@ -1,8 +1,6 @@
 package com.mapi.mapinci.Fragments;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -18,11 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import com.google.gson.ExclusionStrategy;
-import com.google.gson.FieldAttributes;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.mapi.mapinci.CoordinatesAPI;
 import com.mapi.mapinci.R;
 import com.mapi.mapinci.Utils.graph.Nodes;
 import com.mapi.mapinci.Utils.graph.segments.Shape;
@@ -33,11 +26,7 @@ import java.util.ArrayList;
 
 
 import cz.msebera.android.httpclient.Header;
-import retrofit.Callback;
-import retrofit.RestAdapter;
 
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 import retrofit.http.Body;
 
 import com.loopj.android.http.*;
@@ -82,28 +71,8 @@ public class DrawingFragment extends Fragment {
 
     public Nodes sendRequest(@Body Shape shape) {
 
-//        RestAdapter adapter = new RestAdapter.Builder()
-//                .setEndpoint("http://localhost:8080")
-//                .build();
-//
-//        CoordinatesAPI api = adapter.create(CoordinatesAPI.class);
-//
-//        api.sendRequest(shape, new Callback<Nodes>() {
-//            @Override
-//            public void success(Nodes nodes, Response response) {
-//                System.out.println("success");
-//
-//            }
-//
-//            @Override
-//            public void failure(RetrofitError error) {
-//                System.out.println("failure");
-//
-//            }
-//        }) ;
-
         AsyncHttpClient client = new AsyncHttpClient();
-        client.get("https://localhost:8080", new AsyncHttpResponseHandler() {
+        client.post("https://localhost:8080", new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 // called when response HTTP status is "200 OK"
