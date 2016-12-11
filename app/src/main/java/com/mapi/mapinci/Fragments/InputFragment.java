@@ -1,16 +1,42 @@
 package com.mapi.mapinci.Fragments;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.google.android.gms.maps.model.LatLng;
 import com.mapi.mapinci.R;
 
 public class InputFragment extends Fragment {
+
+
+    OnInputFinished callback;
+    Double radius;
+    Double length;
+
+    public interface OnInputFinished {
+        public void OnInputFinished(Double radius, Double length);
+    }
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        // This makes sure that the container activity has implemented
+        // the callback interface. If not, it throws an exception
+        try {
+            callback = (OnInputFinished) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement OnInputFinished");
+        }
+    }
 
     @Nullable
     @Override
@@ -32,9 +58,7 @@ public class InputFragment extends Fragment {
     }
 
     private void goToShapeCreator() {
-        final FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.replace(R.id.content_frame, new DrawingFragment(), "NewFragmentTag");
-        ft.commit();
+        callback.OnInputFinished(radius, length);
     }
 }
 

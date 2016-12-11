@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -12,11 +13,17 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.mapi.mapinci.Fragments.DrawingFragment;
+import com.mapi.mapinci.Fragments.InputFragment;
 import com.mapi.mapinci.Fragments.MapsFragment;
 
 public class RootActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, MapsFragment.OnStartingPointSelected, InputFragment.OnInputFinished {
+
+    LatLng startingPoint;
+    Double radius;
+    Double length;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,5 +100,28 @@ public class RootActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onStartingPointSelected(LatLng startingPoint) {
+        this.startingPoint = startingPoint;
+
+        InputFragment newFragment = new InputFragment();
+
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.content_frame, newFragment, "NewFragmentTag");
+        ft.commit();
+    }
+
+    @Override
+    public void OnInputFinished(Double radius, Double length) {
+        this.radius = radius;
+        this.length = length;
+        DrawingFragment newFragment = new DrawingFragment();
+        newFragment.setData(startingPoint, radius, length);
+
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.content_frame, newFragment, "NewFragmentTag");
+        ft.commit();
     }
 }

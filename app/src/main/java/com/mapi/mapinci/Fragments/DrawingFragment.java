@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.mapi.mapinci.R;
 import com.mapi.mapinci.RootActivity;
 import com.mapi.mapinci.Utils.graph.Node;
@@ -37,8 +38,12 @@ import static android.R.attr.width;
 public class DrawingFragment extends Fragment {
 
     DrawView drawView;
-
     LinearLayout drawLayout = null;
+
+    //data to server
+    LatLng startingPoint;
+    Double radius;
+    Double length;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -76,9 +81,16 @@ public class DrawingFragment extends Fragment {
 //        });
     }
 
+    public void setData(LatLng sp, Double radius, Double length) {
+        this.startingPoint = sp;
+        this.radius = radius;
+        this.length = length;
+    }
+
     private void sendToServer() {
         Log.i("send to server", "cos");
     }
+
 
     private class DrawView extends View {
 
