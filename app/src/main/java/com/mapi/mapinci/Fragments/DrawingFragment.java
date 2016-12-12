@@ -36,10 +36,12 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
+import static android.R.attr.gestureColor;
 import static android.R.attr.width;
 import com.loopj.android.http.*;
 import com.mapi.mapinci.Utils.graph.segments.Shape;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.DataOutputStream;
@@ -56,7 +58,7 @@ import cz.msebera.android.httpclient.entity.StringEntity;
 
 public class DrawingFragment extends Fragment {
 
-    private static final String URL = "http://10.22.111.252:8080/coordinate";
+    private static final String URL = "http://192.168.0.15:8080/coordinate";
 
     DrawView drawView;
     LinearLayout drawLayout = null;
@@ -104,6 +106,10 @@ public class DrawingFragment extends Fragment {
         sendButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Shape shape = new Shape();
+                shape.setLength(length);
+                shape.setRadius(radius);
+                shape.setStartPoint(new Node(0L, startingPoint.latitude, startingPoint.longitude));
+                shape.setSegments(drawView.createSegments());
                 sendToServer(shape);
             }
 
@@ -129,16 +135,21 @@ public class DrawingFragment extends Fragment {
 
             AsyncHttpClient client = new AsyncHttpClient();
 
-            client.post(getContext(), URL, body, "application/json", new AsyncHttpResponseHandler() {
+            client.post(getContext(), URL, body, "application/json", new JsonHttpResponseHandler() {
 
                 @Override
-                public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                public void onSuccess(int statusCode, Header[] headers, JSONObject responseBody) {
                     System.out.println("Success! "+statusCode);
+                    System.out.println(responseBody.toString());
+//                    try {
+//                        List<Node> nodes = (List<Node>) responseBody.get("nodes");
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
 
                 }
 
-                @Override
-                public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                public void onFailure(int statusCode, Header[] headers, JSONObject responseBody, Throwable error) {
                     System.out.println("failure.. "+statusCode+"  "+error.getMessage());
                 }
             });
@@ -245,12 +256,13 @@ public class DrawingFragment extends Fragment {
             return continueDraw;
         }
 
-        private void createSegments() {
+        private List<Segment> createSegments() {
             ArrayList<Segment> segments = new ArrayList<>();
             for(int i = 0; i < nodes.size() - 1; i++ ) {
                 segments.add(sf.newFullSegment(nodes.get(i), nodes.get(i+1)));
             }
             addPercentageLength(segments);
+            return segments;
         }
 
         private void addPercentageLength(ArrayList<Segment> segments) {
