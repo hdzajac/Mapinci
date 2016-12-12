@@ -1,6 +1,8 @@
 package com.mapi.mapinci.Utils.graph.segments;
 
 
+import com.mapi.mapinci.Utils.graph.Node;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -10,6 +12,8 @@ import java.util.List;
 public class Shape {
     private List<Segment> segments;
     private Double length;
+    private Double radius;
+    private Node startPoint;
 
     public List<Segment> getSegments() {
         return segments;
@@ -27,6 +31,23 @@ public class Shape {
         this.length = length;
     }
 
+    public Double getRadius() {
+        return radius;
+    }
+
+    public void setRadius(Double radius) {
+        this.radius = radius;
+    }
+
+    public Node getStartPoint() {
+        return startPoint;
+    }
+
+    public void setStartPoint(Node startPoint) {
+        this.startPoint = startPoint;
+    }
+
+
 
     public JSONObject toJson() {
         JSONArray segmentsJson = new JSONArray(segments);
@@ -35,6 +56,8 @@ public class Shape {
         try {
             json.put("segments", segmentsJson);
             json.put("length", length);
+            json.put("radius", radius);
+            json.put("startPoint", startPoint);
         } catch (JSONException e) {
             e.printStackTrace();
         }

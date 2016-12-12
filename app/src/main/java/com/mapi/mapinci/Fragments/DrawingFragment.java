@@ -134,6 +134,7 @@ public class DrawingFragment extends Fragment {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                     System.out.println("Success! "+statusCode);
+
                 }
 
                 @Override
