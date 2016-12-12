@@ -25,6 +25,9 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import com.mapi.mapinci.R;
 import com.mapi.mapinci.RootActivity;
 import com.mapi.mapinci.Utils.graph.Node;
@@ -34,7 +37,9 @@ import com.mapi.mapinci.Utils.graph.segments.Segment;
 import com.mapi.mapinci.Utils.graph.segments.SegmentFactory;
 
 import java.io.BufferedOutputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
@@ -164,13 +169,18 @@ public class DrawingFragment extends Fragment {
                 public void onSuccess(int statusCode, Header[] headers, JSONObject responseBody) {
                     System.out.println("Success! "+statusCode);
                     System.out.println(responseBody.toString());
-//                    callback.OnSuccessResponse(nodes);
-                    
-//                    try {
-//                        List<Node> nodes = (List<Node>) responseBody.get("nodes");
-//                    } catch (JSONException e) {
-//                        e.printStackTrace();
-//                    }
+
+                    Gson gson = new Gson();
+
+                    JsonParser parser = new JsonParser();
+                    JsonElement jsonElement =  parser.parse(responseBody.toString());
+
+                    Nodes nodes = gson.fromJson(jsonElement, Nodes.class);
+//                    System.out.println(nodes);
+//                    System.out.println(nodes.getNodes());
+//                    System.out.println(nodes.getNodes().get(0).getId());
+
+                    callback.OnSuccessResponse(nodes);
 
                 }
 
