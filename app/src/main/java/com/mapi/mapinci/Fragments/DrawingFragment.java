@@ -98,13 +98,21 @@ public class DrawingFragment extends Fragment {
         Log.i("length", length.toString());
 
 
-        Button myFab = (Button) view.findViewById(R.id.sendButton);
+        Button sendButton = (Button) view.findViewById(R.id.sendButton);
+        Button undoButton = (Button) view.findViewById(R.id.undoButton);
 
-        myFab.setOnClickListener(new View.OnClickListener() {
+        sendButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Shape shape = new Shape();
                 sendToServer(shape);
             }
+
+        });
+        undoButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                drawView.undoLastPoint();
+            }
+
         });
     }
 
@@ -114,10 +122,6 @@ public class DrawingFragment extends Fragment {
         this.length = length;
     }
 
-//    private void sendToServer() {
-//        Log.i("send to server", "cos");
-//        drawView.undoLastPoint();
-    
     private void sendToServer(Shape shape) {
 
         try {
