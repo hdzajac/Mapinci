@@ -1,5 +1,8 @@
 package com.mapi.mapinci.Utils.graph;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Comparator;
 
 public class Node implements Comparable<Node>{
@@ -52,4 +55,19 @@ public class Node implements Comparable<Node>{
         else
             return id > n.getId() ? 1 : -1;
     }
+//
+//    public JSONObject toJson() {
+//        JSONObject json = new JSONObject();
+//
+//        try {
+//            json.put("id", id);
+//            json.put("longitude", longitude);
+//            json.put("latitude", latitude);
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//
+//        return json;
+//
+//    }
 }
