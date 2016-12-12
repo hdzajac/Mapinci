@@ -1,5 +1,6 @@
 package com.mapi.mapinci.Fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -28,6 +29,7 @@ import com.mapi.mapinci.R;
 import com.mapi.mapinci.RootActivity;
 import com.mapi.mapinci.Utils.graph.Node;
 import com.mapi.mapinci.Utils.graph.NodeFactory;
+import com.mapi.mapinci.Utils.graph.Nodes;
 import com.mapi.mapinci.Utils.graph.segments.Segment;
 import com.mapi.mapinci.Utils.graph.segments.SegmentFactory;
 
@@ -58,6 +60,13 @@ import cz.msebera.android.httpclient.entity.StringEntity;
 
 public class DrawingFragment extends Fragment {
 
+    OnSuccessResponse callback;
+
+    public interface OnSuccessResponse {
+        public void OnSuccessResponse(Nodes nodes);
+    }
+
+
     private static final String URL = "http://192.168.0.15:8080/coordinate";
 
     DrawView drawView;
@@ -67,6 +76,20 @@ public class DrawingFragment extends Fragment {
     LatLng startingPoint;
     Double radius;
     Double length;
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        // This makes sure that the container activity has implemented
+        // the callback interface. If not, it throws an exception
+        try {
+            callback = (OnSuccessResponse) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement OnSuccessResponse");
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -141,6 +164,8 @@ public class DrawingFragment extends Fragment {
                 public void onSuccess(int statusCode, Header[] headers, JSONObject responseBody) {
                     System.out.println("Success! "+statusCode);
                     System.out.println(responseBody.toString());
+//                    callback.OnSuccessResponse(nodes);
+                    
 //                    try {
 //                        List<Node> nodes = (List<Node>) responseBody.get("nodes");
 //                    } catch (JSONException e) {

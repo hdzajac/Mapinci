@@ -17,9 +17,11 @@ import com.google.android.gms.maps.model.LatLng;
 import com.mapi.mapinci.Fragments.DrawingFragment;
 import com.mapi.mapinci.Fragments.InputFragment;
 import com.mapi.mapinci.Fragments.MapsFragment;
+import com.mapi.mapinci.Fragments.ResultFragment;
+import com.mapi.mapinci.Utils.graph.Nodes;
 
 public class RootActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, MapsFragment.OnStartingPointSelected, InputFragment.OnInputFinished {
+        implements NavigationView.OnNavigationItemSelectedListener, MapsFragment.OnStartingPointSelected, InputFragment.OnInputFinished, DrawingFragment.OnSuccessResponse {
 
     LatLng startingPoint;
     Double radius;
@@ -119,6 +121,16 @@ public class RootActivity extends AppCompatActivity
         this.length = length;
         DrawingFragment newFragment = new DrawingFragment();
         newFragment.setData(startingPoint, radius, length);
+
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.content_frame, newFragment, "NewFragmentTag");
+        ft.commit();
+    }
+
+    @Override
+    public void OnSuccessResponse(Nodes nodes) {
+        ResultFragment newFragment = new ResultFragment();
+        newFragment.setNodes(nodes);
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.content_frame, newFragment, "NewFragmentTag");

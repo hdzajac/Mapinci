@@ -34,6 +34,10 @@ public class ResultFragment extends Fragment implements OnMapReadyCallback {
     private GoogleMap mMap;
     private Nodes nodes;
 
+    public void setNodes(Nodes nodes) {
+        this.nodes = nodes;
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
