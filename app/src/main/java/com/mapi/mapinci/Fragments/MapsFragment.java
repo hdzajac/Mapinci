@@ -1,5 +1,6 @@
 package com.mapi.mapinci.Fragments;
 
+        import android.app.Activity;
         import android.os.Bundle;
         import android.support.annotation.Nullable;
         import android.support.design.widget.FloatingActionButton;
@@ -24,7 +25,25 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     LatLng startingPoint;
+    OnStartingPointSelected callback;
 
+    public interface OnStartingPointSelected {
+        public void onStartingPointSelected(LatLng startingPoint);
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        // This makes sure that the container activity has implemented
+        // the callback interface. If not, it throws an exception
+        try {
+            callback = (OnStartingPointSelected) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement OnStartingPointSelected");
+        }
+    }
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -48,9 +67,9 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
     }
 
     private void goToInputFragment() {
-        final FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.replace(R.id.content_frame, new InputFragment(), "NewFragmentTag");
-        ft.commit();
+        if(startingPoint!= null) {
+            callback.onStartingPointSelected(startingPoint);
+        }
     }
 
     /**
@@ -66,13 +85,14 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        mMap.setMinZoomPreference(16.0f);
+        mMap.setMinZoomPreference(12.0f);
         mMap.setMaxZoomPreference(20.0f);
+        mMap.animateCamera(CameraUpdateFactory.zoomTo( 18.0f ));
 
         // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(42.508509, 1.534041);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        LatLng cracow = new LatLng(50.0679865, 19.9124113);
+        mMap.addMarker(new MarkerOptions().position(cracow).title("Marker in Krakow"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(cracow));
 
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
 

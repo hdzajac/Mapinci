@@ -19,9 +19,11 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.mapi.mapinci.R;
 import com.mapi.mapinci.RootActivity;
 import com.mapi.mapinci.Utils.graph.Node;
@@ -57,8 +59,12 @@ public class DrawingFragment extends Fragment {
     private static final String URL = "http://10.22.111.252:8080/coordinate";
 
     DrawView drawView;
-
     LinearLayout drawLayout = null;
+
+    //data to server
+    LatLng startingPoint;
+    Double radius;
+    Double length;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -87,7 +93,12 @@ public class DrawingFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        FloatingActionButton myFab = (FloatingActionButton) view.findViewById(R.id.sendButton);
+        Log.i("starting point", startingPoint.latitude + " " + startingPoint.longitude);
+        Log.i("radius", radius.toString());
+        Log.i("length", length.toString());
+
+
+        Button myFab = (Button) view.findViewById(R.id.sendButton);
 
         myFab.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -97,6 +108,16 @@ public class DrawingFragment extends Fragment {
         });
     }
 
+    public void setData(LatLng sp, Double radius, Double length) {
+        this.startingPoint = sp;
+        this.radius = radius;
+        this.length = length;
+    }
+
+//    private void sendToServer() {
+//        Log.i("send to server", "cos");
+//        drawView.undoLastPoint();
+    
     private void sendToServer(Shape shape) {
 
         try {
@@ -124,6 +145,7 @@ public class DrawingFragment extends Fragment {
 
     }
 
+
     private class DrawView extends View {
 
         private ArrayList<Node> nodes = new ArrayList<>();
@@ -135,10 +157,11 @@ public class DrawingFragment extends Fragment {
         private float firstY;
         private float eventX;
         private float eventY;
-        private final float epsilon = 30;
+        private final float epsilon = 40;
         private boolean continueDraw = true;
 
         private final Paint mPaint;
+        private final Paint pointPaint;
         private Path path = new Path();
 
         public DrawView(Context context) {
@@ -147,12 +170,23 @@ public class DrawingFragment extends Fragment {
             mPaint.setStyle(Paint.Style.STROKE);
             mPaint.setColor(Color.BLACK);
             mPaint.setStrokeWidth(6);
+
+            pointPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+            pointPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+            pointPaint.setColor(Color.BLACK);
+            pointPaint.setStrokeWidth(25);
         }
 
         @Override
         protected void onDraw(Canvas canvas) {
             if(counter>1) {
                 canvas.drawPath(path, mPaint);
+                canvas.drawCircle(eventX, eventY, 15, pointPaint);
+            }
+            else {
+                if(firstX!=0 && firstY!=0) {
+                    canvas.drawCircle(firstX, firstY, 15, pointPaint);
+                }
             }
         }
 
@@ -182,12 +216,11 @@ public class DrawingFragment extends Fragment {
                                 counter++;
                             } else {
                                 path.lineTo(firstX, firstY);
+                                eventX = firstX;
+                                eventY = firstY;
                             }
                         }
                         invalidate();
-//                        for (int i = 0; i < nodes.size(); i++) {
-//                            Log.i("Node" + i, nodes.get(i).getLatitude().toString() + " " + nodes.get(i).getLongitude().toString());
-//                        }
                         return true;
                     default:
                         return false;
@@ -231,6 +264,42 @@ public class DrawingFragment extends Fragment {
             return sum;
         }
 
+        public void undoLastPoint() {
+            if(counter>1) {
+                deleteLastNode();
+                undoPath();
+                continueDraw = true;
+                invalidate();
+            }
+            else {
+                counter = 0;
+                nodes.clear();
+                firstX = 0;
+                firstY = 0;
+                path.reset();
+                invalidate();
+            }
+            Log.i("counter", counter + "");
+            Log.i("nodes size", nodes.size() + "");
+        }
+
+
+        private void deleteLastNode() {
+            if(continueDraw==true) {
+                nodes.remove(nodes.size()-1);
+                counter--;
+            }
+        }
+
+        private void undoPath() {
+            path.reset();
+            path.moveTo(nodes.get(0).getLongitude().floatValue(), nodes.get(0).getLatitude().floatValue());
+            for(int i =1; i < nodes.size(); i++) {
+                path.lineTo(nodes.get(i).getLongitude().floatValue(), nodes.get(i).getLatitude().floatValue());
+            }
+            eventX = nodes.get(nodes.size()-1).getLongitude().floatValue();
+            eventY = nodes.get(nodes.size()-1).getLatitude().floatValue();
+        }
 
     }
 

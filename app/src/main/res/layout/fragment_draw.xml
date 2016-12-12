@@ -8,21 +8,22 @@
     android:orientation="vertical"
     android:baselineAligned="false">
 
-    <TextView
-        android:text="Touch to add points and draw your shape"
+
+    <!--<android.support.design.widget.FloatingActionButton-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:clickable="true"-->
+    <!--android:layout_gravity="bottom|right"-->
+    <!--app:fabSize="normal"-->
+    <!--app:srcCompat="@color/colorAccent"-->
+    <!--android:id="@+id/sendButton"-->
+    <!--app:elevation="5dp"-->
+    <!--android:layout_marginRight="16dp"-->
+    <!--android:layout_marginTop="400dp" />-->
+
+    <Button
+        android:text="UNDO"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/textView3" />
-
-
-    <android.support.design.widget.FloatingActionButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        android:layout_gravity="bottom|right"
-        android:layout_margin="16dp"
-        app:fabSize="mini"
-        app:srcCompat="@color/colorAccent"
-        android:id="@+id/sendButton"
-        app:elevation="5dp" />
+        android:id="@+id/sendButton" />
 </LinearLayout>
