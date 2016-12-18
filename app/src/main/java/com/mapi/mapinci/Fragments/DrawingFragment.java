@@ -2,19 +2,13 @@ package com.mapi.mapinci.Fragments;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.Point;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -22,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
@@ -36,27 +29,14 @@ import com.mapi.mapinci.Utils.graph.Nodes;
 import com.mapi.mapinci.Utils.graph.segments.Segment;
 import com.mapi.mapinci.Utils.graph.segments.SegmentFactory;
 
-import java.io.BufferedOutputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
-import static android.R.attr.gestureColor;
-import static android.R.attr.width;
 import com.loopj.android.http.*;
 import com.mapi.mapinci.Utils.graph.segments.Shape;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.json.JSONException;
+
 import org.json.JSONObject;
 
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
-import java.net.URL;
 import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
@@ -68,7 +48,7 @@ public class DrawingFragment extends Fragment {
     OnSuccessResponse callback;
 
     public interface OnSuccessResponse {
-        public void OnSuccessResponse(Nodes nodes);
+        public void onSuccessResponse(Nodes nodes);
     }
 
 
@@ -92,7 +72,7 @@ public class DrawingFragment extends Fragment {
             callback = (OnSuccessResponse) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
-                    + " must implement OnSuccessResponse");
+                    + " must implement onSuccessResponse");
         }
     }
 
@@ -181,7 +161,7 @@ public class DrawingFragment extends Fragment {
 //                    System.out.println(nodes.getNodes());
 //                    System.out.println(nodes.getNodes().get(0).getId());
 
-                    callback.OnSuccessResponse(nodes);
+                    callback.onSuccessResponse(nodes);
 
                 }
 

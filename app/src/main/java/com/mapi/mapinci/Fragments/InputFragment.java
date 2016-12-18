@@ -5,14 +5,12 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
-import com.google.android.gms.maps.model.LatLng;
 import com.mapi.mapinci.R;
 
 public class InputFragment extends Fragment {
@@ -25,7 +23,7 @@ public class InputFragment extends Fragment {
     Double length;
 
     public interface OnInputFinished {
-        public void OnInputFinished(Double radius, Double length);
+        public void onInputFinished(Double radius, Double length);
     }
     @Override
     public void onAttach(Activity activity) {
@@ -37,7 +35,7 @@ public class InputFragment extends Fragment {
             callback = (OnInputFinished) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
-                    + " must implement OnInputFinished");
+                    + " must implement onInputFinished");
         }
     }
 
@@ -68,7 +66,7 @@ public class InputFragment extends Fragment {
         try{
             radius = Double.valueOf(mRadius.getText().toString());
             length = Double.valueOf(mLength.getText().toString());
-            callback.OnInputFinished(radius, length);
+            callback.onInputFinished(radius, length);
         }
         catch(NumberFormatException ex){
             Log.i("input error", " wrong input");

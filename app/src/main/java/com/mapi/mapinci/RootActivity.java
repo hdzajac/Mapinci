@@ -3,6 +3,7 @@ package com.mapi.mapinci;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -23,10 +24,10 @@ import com.mapi.mapinci.Utils.graph.Nodes;
 public class RootActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, MapsFragment.OnStartingPointSelected, InputFragment.OnInputFinished, DrawingFragment.OnSuccessResponse {
 
-    LatLng startingPoint;
-    Double radius;
-    Double length;
-    int fragment;
+    private LatLng startingPoint;
+    private Double radius;
+    private Double length;
+    private Nodes nodes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,10 +45,7 @@ public class RootActivity extends AppCompatActivity
 //        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
 //        navigationView.setNavigationItemSelectedListener(this);
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        Fragment newFragment = new MapsFragment();
-
-        fragmentManager.beginTransaction().replace(R.id.content_frame, newFragment).commit();
+        goToMapsFragment();
 
     }
 
@@ -55,7 +53,22 @@ public class RootActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-
+        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
+        System.out.println(currentFragment.getTag());
+        switch (currentFragment.getTag()) {
+            case "MapsFragment":
+                super.onBackPressed();
+                break;
+            case "InputFragment":
+                goToMapsFragment();
+                break;
+            case "DrawingFragment":
+                onStartingPointSelected(startingPoint);
+                break;
+            case "ResultFragment":
+                onInputFinished(radius, length);
+                break;
+        }
     }
 
     @Override
@@ -91,6 +104,13 @@ public class RootActivity extends AppCompatActivity
         return true;
     }
 
+    public void goToMapsFragment() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        Fragment newFragment = new MapsFragment();
+
+        fragmentManager.beginTransaction().replace(R.id.content_frame, newFragment, "MapsFragment").commit();
+    }
+
     @Override
     public void onStartingPointSelected(LatLng startingPoint) {
         this.startingPoint = startingPoint;
@@ -98,29 +118,32 @@ public class RootActivity extends AppCompatActivity
         InputFragment newFragment = new InputFragment();
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.content_frame, newFragment, "NewFragmentTag");
+        ft.replace(R.id.content_frame, newFragment, "InputFragment");
         ft.commit();
     }
 
     @Override
-    public void OnInputFinished(Double radius, Double length) {
+    public void onInputFinished(Double radius, Double length) {
         this.radius = radius;
         this.length = length;
         DrawingFragment newFragment = new DrawingFragment();
         newFragment.setData(startingPoint, radius, length);
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.content_frame, newFragment, "NewFragmentTag");
+        ft.replace(R.id.content_frame, newFragment, "DrawingFragment");
         ft.commit();
     }
 
     @Override
-    public void OnSuccessResponse(Nodes nodes) {
+    public void onSuccessResponse(Nodes nodes) {
+        this.nodes = nodes;
         ResultFragment newFragment = new ResultFragment();
         newFragment.setNodes(nodes);
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.content_frame, newFragment, "NewFragmentTag");
+        ft.replace(R.id.content_frame, newFragment, "ResultFragment");
         ft.commit();
     }
+
+
 }
