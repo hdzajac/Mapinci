@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
@@ -56,7 +57,7 @@ public class DrawingFragment extends Fragment {
     private static final String URL = "http://mapinci.azurewebsites.net/mapinci/coordinate";
 
     DrawView drawView;
-    LinearLayout drawLayout = null;
+    RelativeLayout drawLayout = null;
 
     //data to server
     LatLng startingPoint;
@@ -84,7 +85,7 @@ public class DrawingFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_draw, container, false);
 
-        drawLayout = (LinearLayout)view.findViewById(R.id.fragment_draw);
+        drawLayout = (RelativeLayout) view.findViewById(R.id.fragment_draw);
 
         drawView = new DrawView((RootActivity)getActivity());
         LinearLayout.LayoutParams drawViewParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
