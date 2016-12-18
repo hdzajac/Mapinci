@@ -20,6 +20,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.mapi.mapinci.R;
 import com.mapi.mapinci.Utils.graph.Node;
@@ -28,6 +29,8 @@ import com.mapi.mapinci.Utils.graph.segments.Shape;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.mapi.mapinci.R.id.map;
 
 public class ResultFragment extends Fragment implements OnMapReadyCallback {
 
@@ -65,25 +68,34 @@ public class ResultFragment extends Fragment implements OnMapReadyCallback {
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-        mMap.setMinZoomPreference(12.0f);
-        mMap.setMaxZoomPreference(20.0f);
-        mMap.animateCamera(CameraUpdateFactory.zoomTo( 18.0f ));
 
-        PolylineOptions lineOptions = null;
+
+        mMap = googleMap;
+        mMap.setMinZoomPreference(14.0f);
+        mMap.setMaxZoomPreference(20.0f);
+        mMap.animateCamera(CameraUpdateFactory.zoomTo( 21.0f ));
+
 
         List<Node> nodeList = nodes.getNodes();
+
+        System.out.println(nodeList.toString());
+
         ArrayList<LatLng> points = new ArrayList<>();
 
         for(int i = 0; i<nodeList.size(); i++) {
-            LatLng tmp = new LatLng(nodeList.get(i).getLatitude(),nodeList.get(i).getLongitude());
+            LatLng tmp = new LatLng(nodeList.get(i).getLongitude(),nodeList.get(i).getLatitude());
+
+            System.out.println(tmp.toString());
+
             points.add(tmp);
         }
-        lineOptions.addAll(points);
-        lineOptions.width(10);
-        lineOptions.color(Color.RED);
 
-        mMap.addPolyline(lineOptions);
+
+        Polyline line = mMap.addPolyline(new PolylineOptions()
+                .addAll(points)
+                .width(5)
+                .color(Color.RED));
+        line.setVisible(true);
         mMap.moveCamera(CameraUpdateFactory.newLatLng(points.get(0)));
     }
 }

@@ -186,6 +186,8 @@ public class DrawingFragment extends Fragment {
 
                 public void onFailure(int statusCode, Header[] headers, JSONObject responseBody, Throwable error) {
                     System.out.println("failure.. "+statusCode+"  "+error.getMessage());
+
+
                 }
             });
 
@@ -207,7 +209,7 @@ public class DrawingFragment extends Fragment {
         private float firstY;
         private float eventX;
         private float eventY;
-        private final float epsilon = 40;
+        private final float epsilon = 60;
         private boolean continueDraw = true;
 
         private final Paint mPaint;
@@ -268,6 +270,7 @@ public class DrawingFragment extends Fragment {
                                 path.lineTo(firstX, firstY);
                                 eventX = firstX;
                                 eventY = firstY;
+                                nodes.add(nf.newNode(Double.valueOf(eventX), Double.valueOf(eventY)));
                             }
                         }
                         invalidate();
@@ -336,10 +339,8 @@ public class DrawingFragment extends Fragment {
 
 
         private void deleteLastNode() {
-            if(continueDraw==true) {
                 nodes.remove(nodes.size()-1);
                 counter--;
-            }
         }
 
         private void undoPath() {

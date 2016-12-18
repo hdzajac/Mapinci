@@ -85,13 +85,12 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        mMap.setMinZoomPreference(12.0f);
+        mMap.setMinZoomPreference(15.0f);
         mMap.setMaxZoomPreference(20.0f);
-        mMap.animateCamera(CameraUpdateFactory.zoomTo( 18.0f ));
+        mMap.animateCamera(CameraUpdateFactory.zoomTo( 16.0f ));
 
         // Add a marker in Sydney and move the camera
         LatLng cracow = new LatLng(50.0679865, 19.9124113);
-        mMap.addMarker(new MarkerOptions().position(cracow).title("Marker in Krakow"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(cracow));
 
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
