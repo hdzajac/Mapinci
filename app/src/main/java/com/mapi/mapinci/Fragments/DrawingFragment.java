@@ -172,17 +172,18 @@ public class DrawingFragment extends Fragment {
 
                     }
 
-                    public void onFailure(int statusCode, Header[] headers, JSONObject responseBody, Throwable error) {
-                        System.out.println("failure.. " + statusCode + "  " + error.getMessage());
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                        System.out.println("failure.. " + statusCode + "  " + errorResponse.toString());
 
                         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                         AlertFragment af = new AlertFragment();
                         af.setMessage("Error in connecting to server");
                         af.show(fragmentManager, "onFailure");
+
                     }
                 });
 
-            } catch (UnsupportedEncodingException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
