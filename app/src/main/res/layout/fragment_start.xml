@@ -9,11 +9,11 @@
     android:baselineAligned="false"
     android:weightSum="1">
 
-    <TextView
-        android:text="Start"
+    <ImageView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/startText" />
+        app:srcCompat="@drawable/awful"
+        android:id="@+id/imageView" />
 
     <Button
         android:text="Let's go"
