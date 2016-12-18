@@ -5,6 +5,7 @@ package com.mapi.mapinci.Fragments;
         import android.support.annotation.Nullable;
         import android.support.design.widget.FloatingActionButton;
         import android.support.v4.app.Fragment;
+        import android.support.v4.app.FragmentManager;
         import android.view.LayoutInflater;
         import android.view.View;
         import android.view.ViewGroup;
@@ -65,6 +66,12 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
     private void goToInputFragment() {
         if(startingPoint!= null) {
             callback.goToInputFragment(startingPoint);
+        }
+        else {
+            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+            AlertFragment af = new AlertFragment();
+            af.setMessage("Set starting point");
+            af.show(fragmentManager, "no startingPoint");
         }
     }
 

@@ -9,6 +9,7 @@ import android.graphics.Path;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -137,43 +138,53 @@ public class DrawingFragment extends Fragment {
     }
 
     private void sendToServer(Shape shape) {
+        if (drawView.counter < 2) {
+            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+            AlertFragment af = new AlertFragment();
+            af.setMessage("Create shape");
+            af.show(fragmentManager, "no shape");
+        }
+        else {
+            try {
+                StringEntity body = new StringEntity(shape.toJson().toString());
 
-        try {
-            StringEntity body = new StringEntity(shape.toJson().toString());
+                AsyncHttpClient client = new AsyncHttpClient();
+                client.setTimeout(20 * 1000);
 
-            AsyncHttpClient client = new AsyncHttpClient();
-            client.setTimeout(20 * 1000);
+                client.post(getContext(), URL, body, "application/json", new JsonHttpResponseHandler() {
 
-            client.post(getContext(), URL, body, "application/json", new JsonHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject responseBody) {
+                        System.out.println("Success! " + statusCode);
+                        System.out.println(responseBody.toString());
 
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, JSONObject responseBody) {
-                    System.out.println("Success! "+statusCode);
-                    System.out.println(responseBody.toString());
+                        Gson gson = new Gson();
 
-                    Gson gson = new Gson();
+                        JsonParser parser = new JsonParser();
+                        JsonElement jsonElement = parser.parse(responseBody.toString());
 
-                    JsonParser parser = new JsonParser();
-                    JsonElement jsonElement =  parser.parse(responseBody.toString());
-
-                    Nodes nodes = gson.fromJson(jsonElement, Nodes.class);
+                        Nodes nodes = gson.fromJson(jsonElement, Nodes.class);
 //                    System.out.println(nodes);
 //                    System.out.println(nodes.getNodes());
 //                    System.out.println(nodes.getNodes().get(0).getId());
 
-                    callback.goToResultFragment(nodes);
+                        callback.goToResultFragment(nodes);
 
-                }
+                    }
 
-                public void onFailure(int statusCode, Header[] headers, JSONObject responseBody, Throwable error) {
-                    System.out.println("failure.. "+statusCode+"  "+error.getMessage());
+                    public void onFailure(int statusCode, Header[] headers, JSONObject responseBody, Throwable error) {
+                        System.out.println("failure.. " + statusCode + "  " + error.getMessage());
 
+                        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                        AlertFragment af = new AlertFragment();
+                        af.setMessage("Error in connecting to server");
+                        af.show(fragmentManager, "onFailure");
+                    }
+                });
 
-                }
-            });
-
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
         }
 
     }
@@ -252,6 +263,7 @@ public class DrawingFragment extends Fragment {
                                 eventX = firstX;
                                 eventY = firstY;
                                 nodes.add(nf.newNode(Double.valueOf(eventX), Double.valueOf(eventY)));
+                                counter++;
                             }
                         }
                         invalidate();

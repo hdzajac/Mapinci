@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -70,6 +72,10 @@ public class InputFragment extends Fragment {
         }
         catch(NumberFormatException ex){
             Log.i("input error", " wrong input");
+            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+            AlertFragment af = new AlertFragment();
+            af.setMessage("Enter radius and length");
+            af.show(fragmentManager, "wrong input");
         }
     }
 }
