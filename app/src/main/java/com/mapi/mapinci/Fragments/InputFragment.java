@@ -23,7 +23,7 @@ public class InputFragment extends Fragment {
     Double length;
 
     public interface OnInputFinished {
-        public void onInputFinished(Double radius, Double length);
+        public void goToDrawingFragment(Double radius, Double length);
     }
     @Override
     public void onAttach(Activity activity) {
@@ -35,7 +35,7 @@ public class InputFragment extends Fragment {
             callback = (OnInputFinished) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
-                    + " must implement onInputFinished");
+                    + " must implement goToDrawingFragment");
         }
     }
 
@@ -66,7 +66,7 @@ public class InputFragment extends Fragment {
         try{
             radius = Double.valueOf(mRadius.getText().toString());
             length = Double.valueOf(mLength.getText().toString());
-            callback.onInputFinished(radius, length);
+            callback.goToDrawingFragment(radius, length);
         }
         catch(NumberFormatException ex){
             Log.i("input error", " wrong input");

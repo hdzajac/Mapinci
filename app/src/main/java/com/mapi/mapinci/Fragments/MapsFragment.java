@@ -5,16 +5,12 @@ package com.mapi.mapinci.Fragments;
         import android.support.annotation.Nullable;
         import android.support.design.widget.FloatingActionButton;
         import android.support.v4.app.Fragment;
-        import android.support.v4.app.FragmentManager;
-        import android.support.v4.app.FragmentTransaction;
-        import android.util.Log;
         import android.view.LayoutInflater;
         import android.view.View;
         import android.view.ViewGroup;
 
         import com.google.android.gms.maps.CameraUpdateFactory;
         import com.google.android.gms.maps.GoogleMap;
-        import com.google.android.gms.maps.MapFragment;
         import com.google.android.gms.maps.OnMapReadyCallback;
         import com.google.android.gms.maps.SupportMapFragment;
         import com.google.android.gms.maps.model.LatLng;
@@ -28,7 +24,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
     OnStartingPointSelected callback;
 
     public interface OnStartingPointSelected {
-        public void onStartingPointSelected(LatLng startingPoint);
+        public void goToInputFragment(LatLng startingPoint);
     }
 
     @Override
@@ -68,7 +64,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
 
     private void goToInputFragment() {
         if(startingPoint!= null) {
-            callback.onStartingPointSelected(startingPoint);
+            callback.goToInputFragment(startingPoint);
         }
     }
 

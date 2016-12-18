@@ -48,7 +48,7 @@ public class DrawingFragment extends Fragment {
     OnSuccessResponse callback;
 
     public interface OnSuccessResponse {
-        public void onSuccessResponse(Nodes nodes);
+        public void goToResultFragment(Nodes nodes);
     }
 
 
@@ -72,7 +72,7 @@ public class DrawingFragment extends Fragment {
             callback = (OnSuccessResponse) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
-                    + " must implement onSuccessResponse");
+                    + " must implement goToResultFragment");
         }
     }
 
@@ -161,7 +161,7 @@ public class DrawingFragment extends Fragment {
 //                    System.out.println(nodes.getNodes());
 //                    System.out.println(nodes.getNodes().get(0).getId());
 
-                    callback.onSuccessResponse(nodes);
+                    callback.goToResultFragment(nodes);
 
                 }
 

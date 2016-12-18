@@ -3,12 +3,10 @@ package com.mapi.mapinci;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -19,6 +17,7 @@ import com.mapi.mapinci.Fragments.DrawingFragment;
 import com.mapi.mapinci.Fragments.InputFragment;
 import com.mapi.mapinci.Fragments.MapsFragment;
 import com.mapi.mapinci.Fragments.ResultFragment;
+import com.mapi.mapinci.Fragments.StartFragment;
 import com.mapi.mapinci.Utils.graph.Nodes;
 
 public class RootActivity extends AppCompatActivity
@@ -45,7 +44,7 @@ public class RootActivity extends AppCompatActivity
 //        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
 //        navigationView.setNavigationItemSelectedListener(this);
 
-        goToMapsFragment();
+        goToStartFragment();
 
     }
 
@@ -56,17 +55,20 @@ public class RootActivity extends AppCompatActivity
         Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
         System.out.println(currentFragment.getTag());
         switch (currentFragment.getTag()) {
-            case "MapsFragment":
+            case "StartFragment":
                 super.onBackPressed();
+                break;
+            case "MapsFragment":
+                goToStartFragment();
                 break;
             case "InputFragment":
                 goToMapsFragment();
                 break;
             case "DrawingFragment":
-                onStartingPointSelected(startingPoint);
+                goToInputFragment(startingPoint);
                 break;
             case "ResultFragment":
-                onInputFinished(radius, length);
+                goToDrawingFragment(radius, length);
                 break;
         }
     }
@@ -103,6 +105,12 @@ public class RootActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+    public void goToStartFragment() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        Fragment newFragment = new StartFragment();
+
+        fragmentManager.beginTransaction().replace(R.id.content_frame, newFragment, "StartFragment").commit();
+    }
 
     public void goToMapsFragment() {
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -112,7 +120,7 @@ public class RootActivity extends AppCompatActivity
     }
 
     @Override
-    public void onStartingPointSelected(LatLng startingPoint) {
+    public void goToInputFragment(LatLng startingPoint) {
         this.startingPoint = startingPoint;
 
         InputFragment newFragment = new InputFragment();
@@ -123,7 +131,7 @@ public class RootActivity extends AppCompatActivity
     }
 
     @Override
-    public void onInputFinished(Double radius, Double length) {
+    public void goToDrawingFragment(Double radius, Double length) {
         this.radius = radius;
         this.length = length;
         DrawingFragment newFragment = new DrawingFragment();
@@ -135,7 +143,7 @@ public class RootActivity extends AppCompatActivity
     }
 
     @Override
-    public void onSuccessResponse(Nodes nodes) {
+    public void goToResultFragment(Nodes nodes) {
         this.nodes = nodes;
         ResultFragment newFragment = new ResultFragment();
         newFragment.setNodes(nodes);
