@@ -72,7 +72,7 @@ public class DrawingFragment extends Fragment {
     }
 
 
-    private static final String URL = "http://192.168.0.15:8080/coordinate";
+    private static final String URL = "http://mapinci.azurewebsites.net/mapinci/coordinate";
 
     DrawView drawView;
     LinearLayout drawLayout = null;
@@ -162,6 +162,7 @@ public class DrawingFragment extends Fragment {
             StringEntity body = new StringEntity(shape.toJson().toString());
 
             AsyncHttpClient client = new AsyncHttpClient();
+            client.setTimeout(20 * 1000);
 
             client.post(getContext(), URL, body, "application/json", new JsonHttpResponseHandler() {
 
