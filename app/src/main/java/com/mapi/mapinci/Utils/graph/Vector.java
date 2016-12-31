@@ -1,5 +1,8 @@
 package com.mapi.mapinci.Utils.graph;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.logging.Logger;
 
 public class Vector{
@@ -45,4 +48,18 @@ public class Vector{
     public String toString(){
         return String.format("X: %f    Y: %f",x,y);
     }
+
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+
+        try {
+            json.put("x", x);
+            json.put("y", y);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return json;
+    }
+
 }

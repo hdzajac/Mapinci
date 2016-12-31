@@ -86,11 +86,11 @@ public class Segment implements SegmentSoul{
         }
     }
 
-    public double getPercentLength() {
+    public Double getPercentLength() {
         return percentLength;
     }
 
-    public void setPercentLength(double percentLength) {
+    public void setPercentLength(Double percentLength) {
         this.percentLength = percentLength;
     }
     public Double getSlope() {
@@ -133,9 +133,9 @@ public class Segment implements SegmentSoul{
         Double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
                 + Math.cos(Math.toRadians(this.n1.getLatitude())) * Math.cos(Math.toRadians(this.n1.getLatitude()))
                 * Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
-        Double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        Double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(Math.abs(1 - a)));
         this.length = R * c * 1000; // convert to meters
-
+        System.out.println("NEW LENGTH: "+this.length+"  c: "+c+"  a: "+a.toString()+"  1-a"+(1-a)+"  Math.sqrt(a): "+Math.sqrt(a)+"  Math.sqrt(1 - a): "+Math.sqrt(1 - a));
     }
 
     public int compareTo(Segment o) {

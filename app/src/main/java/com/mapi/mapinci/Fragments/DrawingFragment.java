@@ -43,6 +43,8 @@ import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.entity.StringEntity;
+import cz.msebera.android.httpclient.message.BasicHeader;
+import cz.msebera.android.httpclient.protocol.HTTP;
 
 
 public class DrawingFragment extends Fragment {
@@ -55,6 +57,7 @@ public class DrawingFragment extends Fragment {
 
 
     private static final String URL = "http://mapinci.azurewebsites.net/mapinci/coordinate";
+//    private static final String URL = "http://192.168.0.15:8080/coordinate";
 
     DrawView drawView;
     RelativeLayout drawLayout = null;
@@ -146,11 +149,16 @@ public class DrawingFragment extends Fragment {
             af.show(fragmentManager, "no shape");
         }
         else {
+
+
             try {
                 StringEntity body = new StringEntity(shape.toJson().toString());
-
+                body.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
+                System.out.println("Body: \n"+body);
+                System.out.println(shape.toJson());
                 AsyncHttpClient client = new AsyncHttpClient();
                 client.setTimeout(20 * 1000);
+
 
                 client.post(getContext(), URL, body, "application/json", new JsonHttpResponseHandler() {
 
@@ -173,13 +181,14 @@ public class DrawingFragment extends Fragment {
 
                     }
 
-                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                        System.out.println("failure.. " + statusCode + "  " + errorResponse.toString());
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable error, JSONObject responseBody) {
+                    System.out.println("failure.. "+statusCode+"  "+error.getMessage()+"\n"+error.toString());
 
-                        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                        AlertFragment af = new AlertFragment();
-                        af.setMessage("Error in connecting to server");
-                        af.show(fragmentManager, "onFailure");
+                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                    AlertFragment af = new AlertFragment();
+                    af.setMessage("Error in connecting to server");
+                    af.show(fragmentManager, "onFailure");
 
                     }
                 });
@@ -299,17 +308,24 @@ public class DrawingFragment extends Fragment {
         }
 
         private void addPercentageLength(ArrayList<Segment> segments) {
-            double perimeter = countPerimeter(segments);
+            Double perimeter = countPerimeter(segments);
             for (Segment segment : segments) {
+                if (perimeter == 0.0) {
+                    segment.setPercentLength(0.0);
+                    continue;
+                }
                 segment.setPercentLength(segment.getLength()/perimeter);
             }
         }
 
-        private double countPerimeter(ArrayList<Segment> segments ) {
-            double sum = 0;
+        private Double countPerimeter(ArrayList<Segment> segments ) {
+            Double sum = 0.0;
             for (Segment segment : segments) {
+                System.out.println("\tLENGTH: "+segment.getLength());
                 sum += segment.getLength();
+                System.out.println("\tSUM: "+sum);
             }
+
             return sum;
         }
 
