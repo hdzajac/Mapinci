@@ -126,16 +126,12 @@ public class Segment implements SegmentSoul{
     }
 
     protected void calculateLength() {
-        final int R = 6371; // Radius of the earth
 
         Double latDistance = Math.toRadians(this.n2.getLatitude() - this.n1.getLatitude());
         Double lonDistance = Math.toRadians(this.n2.getLongitude() - this.n1.getLongitude());
-        Double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
-                + Math.cos(Math.toRadians(this.n1.getLatitude())) * Math.cos(Math.toRadians(this.n1.getLatitude()))
-                * Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
-        Double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(Math.abs(1 - a)));
-        this.length = R * c * 1000; // convert to meters
-        System.out.println("NEW LENGTH: "+this.length+"  c: "+c+"  a: "+a.toString()+"  1-a"+(1-a)+"  Math.sqrt(a): "+Math.sqrt(a)+"  Math.sqrt(1 - a): "+Math.sqrt(1 - a));
+
+        this.length = Math.sqrt((Math.pow(latDistance, 2) + Math.pow(lonDistance,2)));
+        System.out.println("NEW LENGTH: "+this.length+"  Math.pow(lon): "+Math.pow(lonDistance,2)+"  Math.pow(lat): "+Math.pow(latDistance, 2));
     }
 
     public int compareTo(Segment o) {
