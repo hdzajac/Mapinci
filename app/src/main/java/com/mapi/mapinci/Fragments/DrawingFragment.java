@@ -121,7 +121,7 @@ public class DrawingFragment extends Fragment {
                 Shape shape = new Shape();
                 shape.setLength(length);
                 shape.setRadius(radius);
-                shape.setStartPoint(new Node(0L, startingPoint.latitude, startingPoint.longitude));
+                shape.setStartPoint(new Node(0L, startingPoint.longitude, startingPoint.latitude));
                 shape.setSegments(drawView.createSegments());
                 sendToServer(shape);
             }
@@ -142,7 +142,7 @@ public class DrawingFragment extends Fragment {
     }
 
     private void sendToServer(Shape shape) {
-        if (drawView.counter < 2) {
+        if (drawView.counter < 3) {
             FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
             AlertFragment af = new AlertFragment();
             af.setMessage("Create shape");
