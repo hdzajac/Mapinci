@@ -59,7 +59,7 @@ public class Shape {
 
         try {
             JSONArray segmentsJson = createJsonArrayFromList(segments);
-            System.out.println(segmentsJson.toString());
+            //System.out.println(segmentsJson.toString());
             json.put("segments", segmentsJson);
             json.put("length", length);
             json.put("radius", radius);
@@ -67,16 +67,16 @@ public class Shape {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        System.out.println(json.toString());
+        //System.out.println(json.toString());
         return json;
     }
 
     private JSONArray createJsonArrayFromList(List<Segment> list) throws JSONException{
         JSONArray jsonArray = new JSONArray();
         for(Segment segment : list) {
-            System.out.println("LENGTH: "+segment.getLength());
-            System.out.println("PERCENTAGE LENGTH: "+segment.getPercentLength());
-            System.out.println("SLOPE: "+segment.getSlope());
+//            System.out.println("LENGTH: "+segment.getLength());
+//            System.out.println("PERCENTAGE LENGTH: "+segment.getPercentLength());
+//            System.out.println("SLOPE: "+segment.getSlope());
 
             JSONObject json = new JSONObject();
 

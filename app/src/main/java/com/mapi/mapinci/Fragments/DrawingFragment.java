@@ -56,8 +56,8 @@ public class DrawingFragment extends Fragment {
     }
 
 
-    private static final String URL = "http://mapinci.azurewebsites.net/mapinci/coordinate";
-//    private static final String URL = "http://192.168.0.15:8080/coordinate";
+   // private static final String URL = "http://mapinci.azurewebsites.net/mapinci/coordinate";
+    private static final String URL = "http://192.168.0.220:8080/coordinate";
 
     DrawView drawView;
     RelativeLayout drawLayout = null;
@@ -154,10 +154,12 @@ public class DrawingFragment extends Fragment {
             try {
                 StringEntity body = new StringEntity(shape.toJson().toString());
                 body.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
-                System.out.println("Body: \n"+body);
-                System.out.println(shape.toJson());
+                //System.out.println("Body: \n"+body);
+                System.out.println("---------------------------");
+                System.out.println(shape.toJson().toString());
+                System.out.println("--------------------------");
                 AsyncHttpClient client = new AsyncHttpClient();
-                client.setTimeout(20 * 1000);
+                client.setTimeout(120 * 1000);
 
 
                 client.post(getContext(), URL, body, "application/json", new JsonHttpResponseHandler() {
@@ -303,6 +305,9 @@ public class DrawingFragment extends Fragment {
             for(int i = 0; i < nodes.size() - 1; i++ ) {
                 segments.add(sf.newFullSegment(nodes.get(i), nodes.get(i+1)));
             }
+            if(!continueDraw){
+                segments.get(segments.size()-1).setNode2(nodes.get(0));
+            }
             addPercentageLength(segments);
             return segments;
         }
@@ -321,9 +326,9 @@ public class DrawingFragment extends Fragment {
         private Double countPerimeter(ArrayList<Segment> segments ) {
             Double sum = 0.0;
             for (Segment segment : segments) {
-                System.out.println("\tLENGTH: "+segment.getLength());
+                //System.out.println("\tLENGTH: "+segment.getLength());
                 sum += segment.getLength();
-                System.out.println("\tSUM: "+sum);
+                //System.out.println("\tSUM: "+sum);
             }
 
             return sum;
