@@ -161,10 +161,6 @@ public class DrawingFragment extends Fragment {
             }
             System.out.println("===================SEGMENTS======================");
 
-            Nodes nodes = new Nodes();
-            callback.goToResultFragment(nodes);
-
-
             try {
                 StringEntity body = new StringEntity(shape.toJson().toString());
                 body.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
@@ -189,11 +185,22 @@ public class DrawingFragment extends Fragment {
                         JsonElement jsonElement = parser.parse(responseBody.toString());
 
                         Nodes nodes = gson.fromJson(jsonElement, Nodes.class);
-//                    System.out.println(nodes);
-//                    System.out.println(nodes.getNodes());
-//                    System.out.println(nodes.getNodes().get(0).getId());
 
-                        callback.goToResultFragment(nodes);
+                        System.out.println(nodes);
+                        System.out.println(nodes.getNodes());
+                        System.out.println(nodes.getNodes().get(0).getId());
+
+
+                        if(nodes.getNodes().size() == 0) {
+                            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                            AlertFragment af = new AlertFragment();
+                            af.setMessage("Sadly, we have not found your shape. Try something else.");
+                            af.show(fragmentManager, "onFailure");
+                        }
+                        else {
+                            callback.goToResultFragment(nodes);
+                        }
+
 
                     }
 
@@ -203,7 +210,7 @@ public class DrawingFragment extends Fragment {
 
                     FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                     AlertFragment af = new AlertFragment();
-                    af.setMessage("Error in connecting to server");
+                    af.setMessage("Sadly, we have not found your shape. Try something else.");
                     af.show(fragmentManager, "onFailure");
 
                     }
@@ -212,7 +219,7 @@ public class DrawingFragment extends Fragment {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            
+
         }
 
     }
