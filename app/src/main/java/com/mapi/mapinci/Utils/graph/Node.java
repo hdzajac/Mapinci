@@ -70,4 +70,8 @@ public class Node implements Comparable<Node>{
         return json;
 
     }
+
+    public void changeCoordinatesToProper(Double height) {
+        this.latitude = height - this.latitude;
+    }
 }

@@ -71,15 +71,16 @@ public class ResultFragment extends Fragment implements OnMapReadyCallback {
 
 
         mMap = googleMap;
-        mMap.setMinZoomPreference(14.0f);
+        mMap.setMinZoomPreference(15.0f);
         mMap.setMaxZoomPreference(20.0f);
-        mMap.animateCamera(CameraUpdateFactory.zoomTo( 21.0f ));
+        mMap.animateCamera(CameraUpdateFactory.zoomTo( 16.0f ));
+
 
 
         List<Node> nodeList = nodes.getNodes();
 
         System.out.println(nodeList.toString());
-
+//
         ArrayList<LatLng> points = new ArrayList<>();
 
         for(int i = 0; i<nodeList.size(); i++) {
@@ -91,11 +92,58 @@ public class ResultFragment extends Fragment implements OnMapReadyCallback {
         }
 
 
+//        LatLng n0 = new LatLng(50.0683096, 19.9196125);
+//        points.add(n0);
+//        LatLng n1 = new LatLng(50.0683182, 19.9196063);
+//        points.add(n1);
+//        LatLng n2 = new LatLng(50.0683096, 19.9196125);
+//        points.add(n2);
+//        LatLng n3 = new LatLng(50.0682592, 19.9198551);
+//        points.add(n3);
+//        LatLng n4 = new LatLng(50.0683916, 19.9203469);
+//        points.add(n4);
+//        LatLng n5 = new LatLng(50.0684266, 19.9204862);
+//        points.add(n5);
+//        LatLng n6 = new LatLng(50.0684595, 19.9206487);
+//        points.add(n6);
+//        LatLng n7 = new LatLng( 50.0684266, 19.9204862);
+//        points.add(n7);
+//        LatLng n8 = new LatLng(50.0683916, 19.9203469);
+//        points.add(n8);
+//        LatLng n9 = new LatLng(50.0682592, 19.9198551);
+//        points.add(n9);
+//        LatLng n10 = new LatLng( 50.0682151, 19.9196881);
+//        points.add(n10);
+//        LatLng n11 = new LatLng(50.0681595, 19.9194873);
+//        points.add(n11);
+//        LatLng n12 = new LatLng(50.0681126, 19.9193166);
+//        points.add(n12);
+//        LatLng n13 = new LatLng(50.0680634, 19.9191441);
+//        points.add(n13);
+//        LatLng n14 = new LatLng(50.068018, 19.9189749);
+//        points.add(n14);
+//        LatLng n15 = new LatLng( 50.0679717, 19.9188051);
+//        points.add(n15);
+//        LatLng n16 = new LatLng(50.0679201, 19.918615);
+//        points.add(n16);
+//        LatLng n17 = new LatLng(50.0679717, 19.9188051);
+//        points.add(n17);
+//        LatLng n18 = new LatLng(50.068018, 19.9189749);
+//        points.add(n18);
+
         Polyline line = mMap.addPolyline(new PolylineOptions()
                 .addAll(points)
                 .width(5)
                 .color(Color.RED));
+
         line.setVisible(true);
+
+//        for(int i = 0; i < 19; i++) {
+//            LatLng tmp = points.get(i);
+//            mMap.addMarker(new MarkerOptions().position(tmp));
+//        }
+
+        LatLng cracow = new LatLng(50.0679865, 19.9124113);
         mMap.moveCamera(CameraUpdateFactory.newLatLng(points.get(0)));
     }
 }

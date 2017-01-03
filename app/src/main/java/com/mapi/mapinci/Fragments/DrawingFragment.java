@@ -2,6 +2,7 @@ package com.mapi.mapinci.Fragments;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -56,8 +57,8 @@ public class DrawingFragment extends Fragment {
     }
 
 
-   // private static final String URL = "http://mapinci.azurewebsites.net/mapinci/coordinate";
-    private static final String URL = "http://192.168.0.220:8080/coordinate";
+    private static final String URL = "http://mapinci.azurewebsites.net/mapinci/coordinate";
+//    private static final String URL = "http://192.168.0.220:8080/coordinate";
 
     DrawView drawView;
     RelativeLayout drawLayout = null;
@@ -84,7 +85,6 @@ public class DrawingFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.i("DrawingFragment", "onCreateView");
-
 
         View view = inflater.inflate(R.layout.fragment_draw, container, false);
 
@@ -142,6 +142,8 @@ public class DrawingFragment extends Fragment {
     }
 
     private void sendToServer(Shape shape) {
+
+
         if (drawView.counter < 3) {
             FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
             AlertFragment af = new AlertFragment();
@@ -149,6 +151,18 @@ public class DrawingFragment extends Fragment {
             af.show(fragmentManager, "no shape");
         }
         else {
+
+            List<Segment> segments = shape.getSegments();
+
+            System.out.println("===================SEGMENTS======================");
+
+            for(Segment s: segments) {
+                System.out.println(s.getNode1().toJson());
+            }
+            System.out.println("===================SEGMENTS======================");
+
+            Nodes nodes = new Nodes();
+            callback.goToResultFragment(nodes);
 
 
             try {
@@ -159,7 +173,7 @@ public class DrawingFragment extends Fragment {
                 System.out.println(shape.toJson().toString());
                 System.out.println("--------------------------");
                 AsyncHttpClient client = new AsyncHttpClient();
-                client.setTimeout(120 * 1000);
+                client.setTimeout(200 * 1000);
 
 
                 client.post(getContext(), URL, body, "application/json", new JsonHttpResponseHandler() {
@@ -198,6 +212,7 @@ public class DrawingFragment extends Fragment {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            
         }
 
     }
@@ -302,6 +317,21 @@ public class DrawingFragment extends Fragment {
 
         private List<Segment> createSegments() {
             ArrayList<Segment> segments = new ArrayList<>();
+
+//            System.out.println("HEIGHT   "+getScreenHeight());
+//            System.out.println("WIDTH   "+getScreenWidth());
+
+            for(Node n: nodes) {
+//                System.out.println("===================PRZED======================");
+//                System.out.println(n.toJson());
+//                System.out.println("===================PRZED======================");
+
+                n.changeCoordinatesToProper(Double.valueOf(getScreenHeight()));
+
+//                System.out.println("===================PO======================");
+//                System.out.println(n.toJson());
+//                System.out.println("===================PO======================");
+            }
             for(int i = 0; i < nodes.size() - 1; i++ ) {
                 segments.add(sf.newFullSegment(nodes.get(i), nodes.get(i+1)));
             }
@@ -367,6 +397,14 @@ public class DrawingFragment extends Fragment {
             }
             eventX = nodes.get(nodes.size()-1).getLongitude().floatValue();
             eventY = nodes.get(nodes.size()-1).getLatitude().floatValue();
+        }
+
+        public int getScreenWidth() {
+            return Resources.getSystem().getDisplayMetrics().widthPixels;
+        }
+
+        public int getScreenHeight() {
+            return Resources.getSystem().getDisplayMetrics().heightPixels;
         }
 
     }
