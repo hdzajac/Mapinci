@@ -79,12 +79,12 @@ public class ResultFragment extends Fragment implements OnMapReadyCallback {
 
         List<Node> nodeList = nodes.getNodes();
 
-        System.out.println(nodeList.toString());
-//
+//        System.out.println(nodeList.toString());
+
         ArrayList<LatLng> points = new ArrayList<>();
 
         for(int i = 0; i<nodeList.size(); i++) {
-            LatLng tmp = new LatLng(nodeList.get(i).getLongitude(),nodeList.get(i).getLatitude());
+            LatLng tmp = new LatLng(nodeList.get(i).getLatitude(),nodeList.get(i).getLongitude());
 
             System.out.println(tmp.toString());
 
@@ -144,6 +144,8 @@ public class ResultFragment extends Fragment implements OnMapReadyCallback {
 //        }
 
         LatLng cracow = new LatLng(50.0679865, 19.9124113);
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(points.get(0)));
+        if(points.size() > 0) {
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(points.get(0)));
+        }
     }
 }

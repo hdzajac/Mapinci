@@ -165,6 +165,8 @@ public class DrawingFragment extends Fragment {
             }
             System.out.println("===================SEGMENTS======================");
 
+
+
             try {
                 StringEntity body = new StringEntity(shape.toJson().toString());
                 body.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
@@ -175,7 +177,7 @@ public class DrawingFragment extends Fragment {
                 AsyncHttpClient client = new AsyncHttpClient();
                 client.setTimeout(120 * 1000);
 
-                progress = ProgressDialog.show(this.getContext(), "Searching for your sharpe",
+                progress = ProgressDialog.show(this.getContext(), "Looking for your shape",
                         "Please wait", true);
 
                 client.post(getContext(), URL, body, "application/json", new JsonHttpResponseHandler() {
@@ -194,9 +196,9 @@ public class DrawingFragment extends Fragment {
 
                         Nodes nodes = gson.fromJson(jsonElement, Nodes.class);
 
-                        System.out.println(nodes);
-                        System.out.println(nodes.getNodes());
-                        System.out.println(nodes.getNodes().get(0).getId());
+//                        System.out.println(nodes);
+//                        System.out.println(nodes.getNodes());
+//                        System.out.println(nodes.getNodes().get(0).getId());
 
 
                         if(nodes.getNodes().size() == 0) {
