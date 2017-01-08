@@ -161,8 +161,6 @@ public class DrawingFragment extends Fragment {
             }
             System.out.println("===================SEGMENTS======================");
 
-            Nodes nodes = new Nodes();
-            callback.goToResultFragment(nodes);
 
 
             try {

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/fragment_start"
-    android:background="#4F4E48"
+    android:background="#4c4b45"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:baselineAligned="false"
