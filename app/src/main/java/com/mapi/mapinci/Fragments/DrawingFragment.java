@@ -1,6 +1,7 @@
 package com.mapi.mapinci.Fragments;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Canvas;
@@ -67,6 +68,9 @@ public class DrawingFragment extends Fragment {
     LatLng startingPoint;
     Double radius;
     Double length;
+
+
+    ProgressDialog progress;
 
     @Override
     public void onAttach(Activity activity) {
@@ -169,8 +173,10 @@ public class DrawingFragment extends Fragment {
                 System.out.println(shape.toJson().toString());
                 System.out.println("--------------------------");
                 AsyncHttpClient client = new AsyncHttpClient();
-                client.setTimeout(200 * 1000);
+                client.setTimeout(120 * 1000);
 
+                progress = ProgressDialog.show(this.getContext(), "Searching for your sharpe",
+                        "Please wait", true);
 
                 client.post(getContext(), URL, body, "application/json", new JsonHttpResponseHandler() {
 
@@ -180,6 +186,8 @@ public class DrawingFragment extends Fragment {
                         System.out.println(responseBody.toString());
 
                         Gson gson = new Gson();
+
+                        progress.dismiss();
 
                         JsonParser parser = new JsonParser();
                         JsonElement jsonElement = parser.parse(responseBody.toString());
@@ -208,6 +216,8 @@ public class DrawingFragment extends Fragment {
                 public void onFailure(int statusCode, Header[] headers, Throwable error, JSONObject responseBody) {
                     System.out.println("failure.. "+statusCode+"  "+error.getMessage()+"\n"+error.toString());
 
+                    progress.dismiss();
+
                     FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                     AlertFragment af = new AlertFragment();
                     af.setMessage("Sadly, we have not found your shape. Try something else.");
@@ -218,6 +228,7 @@ public class DrawingFragment extends Fragment {
 
             } catch (Exception e) {
                 e.printStackTrace();
+                progress.dismiss();
             }
 
         }
